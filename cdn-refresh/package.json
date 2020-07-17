@@ -1,0 +1,22 @@
+{
+  "name": "tencent-cdn-refresh-cli",
+  "version": "0.0.2",
+  "description": "腾讯云cdn刷新命令行工具",
+  "main": "index.js",
+  "author": "<yangchao0510@126.com> (yangchao)",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": "index.js",
+  "keywords": [
+    "tencent cdn",
+    "refresh",
+    "cli"
+  ],
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "lodash": "^4.17.15",
+    "tencentcloud-sdk-nodejs": "3.0.211"
+  }
+}
