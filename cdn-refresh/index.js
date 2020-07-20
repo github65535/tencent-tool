@@ -52,33 +52,17 @@ const {
     param,
     chalk.red("arg -p param value error. < enter tencent-cdn-refresh-cli -h >")
   );
-  log.success('即将刷新：',param);
 //腾讯云配置
-let _ossconfig = undefined;
-const ossconfig = Object.assign(
-    {
+const cdnconfig = {
       accessKeyId: void 0,
       accessKeySecret: void 0,
       param: void 0
-    },
-    _ossconfig
-  );
-if (accessKeyId && accessKeySecret) {
-    ossconfig.accessKeyId = accessKeyId;
-    ossconfig.accessKeySecret = accessKeySecret;
-    ossconfig.param = param;
-  }
-
-//为空校验
-
-    if (
-        _.some(
-            _.pick(ossconfig, "accessKeyId", "accessKeySecret", "param"),
-            val => typeof val === "undefined"
-        )
-    ) {
-        throw new Error("invalid config");
     }
+if (accessKeyId && accessKeySecret) {
+    cdnconfig.accessKeyId = accessKeyId;
+    cdnconfig.accessKeySecret = accessKeySecret;
+    cdnconfig.param = param;
+  }
 
 //腾讯云对象初始化
 
@@ -89,7 +73,7 @@ const Credential = tencentcloud.common.Credential;
 const ClientProfile = tencentcloud.common.ClientProfile;
 const HttpProfile = tencentcloud.common.HttpProfile;
 
-let cred = new Credential(ossconfig.accessKeyId,ossconfig.accessKeySecret);
+let cred = new Credential(cdnconfig.accessKeyId,cdnconfig.accessKeySecret);
 let httpProfile = new HttpProfile();
 httpProfile.endpoint = "cdn.tencentcloudapi.com";
 let clientProfile = new ClientProfile();
@@ -102,8 +86,9 @@ if (type === "url") {
     /**
      * URL
      */
+    log.success('即将刷新文件：',param);
     let req = new models.PurgeUrlsCacheRequest();
-    let params = `{\"Urls\":[\"${ossconfig.param}\"]}`
+    let params = `{\"Urls\":[\"${cdnconfig.param}\"]}`
     req.from_json_string(params);
     client.PurgeUrlsCache(req, function(errMsg, response) {
         if (errMsg) {
@@ -118,9 +103,9 @@ if (type === "url") {
     /**
      * 目录
      */
+    log.success('即将刷新目录：',param);
     let req = new models.PurgePathCacheRequest();
-
-    let params = `{\"Paths\":[\"${ossconfig.param}\"],\"FlushType\":\"flush\"}`
+    let params = `{\"Paths\":[\"${cdnconfig.param}\"],\"FlushType\":\"flush\"}`
     req.from_json_string(params);
     client.PurgePathCache(req, function(errMsg, response) {
         if (errMsg) {
